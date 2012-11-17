@@ -50,7 +50,7 @@ if __name__ == '__main__':
     extension = sys.argv[2]
 
     # Optional argument
-    cmd = 'git commit -a'
+    cmd = 'git commit -a -m "automated"; git push origin master'
     if len(sys.argv) == 4:
         cmd = sys.argv[3]
 
