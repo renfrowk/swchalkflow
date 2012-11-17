@@ -16,25 +16,27 @@
 import subprocess
 import sys
 import pyinotify
+import shlex
 
 class OnWriteHandler(pyinotify.ProcessEvent):
-    def my_init(self, cwd, extension, cmd):
+    def my_init(self, cwd, extension, cmds):
         self.cwd = cwd
         self.extensions = extension.split(',')
-        self.cmd = cmd
+        self.cmds = cmds
 
-    def _run_cmd(self):
+    def _run_cmds(self):
         print '==> Modification detected'
-        subprocess.call(self.cmd.split(' '), cwd=self.cwd)
+        subprocess.call(self.cmds[0], cwd=self.cwd)
+        subprocess.call(self.cmds[1], cwd=self.cwd)
 
     def process_IN_MODIFY(self, event):
         if all(not event.pathname.endswith(ext) for ext in self.extensions):
             return
-        self._run_cmd()
+        self._run_cmds()
 
-def auto_compile(path, extension, cmd):
+def auto_compile(path, extension, cmds):
     wm = pyinotify.WatchManager()
-    handler = OnWriteHandler(cwd=path, extension=extension, cmd=cmd)
+    handler = OnWriteHandler(cwd=path, extension=extension, cmds=cmds)
     notifier = pyinotify.Notifier(wm, default_proc_fun=handler)
     wm.add_watch(path, pyinotify.ALL_EVENTS, rec=True, auto_add=True)
     print '==> Start monitoring %s (type c^c to exit)' % path
@@ -50,9 +52,11 @@ if __name__ == '__main__':
     extension = sys.argv[2]
 
     # Optional argument
-    cmd = 'git commit -a -m "automated"; git push origin master'
+    cmd_commit = shlex.split('git commit -a -m "automated"')
+    cmd_push = shlex.split('git push origin master')
+    cmds = [cmd_commit, cmd_push]
     if len(sys.argv) == 4:
-        cmd = sys.argv[3]
+        cmds = sys.argv[3]
 
     # Blocks monitoring
-    auto_compile(path, extension, cmd)
+    auto_compile(path, extension, cmds)
