@@ -5,10 +5,10 @@
 #
 # Blocks monitoring |path| and its subdirectories for modifications on
 # files ending with suffix |extk|. Run |cmd| each time a modification
-# is detected. |cmd| is optional and defaults to 'make'.
+# is detected. |cmd| is optional and defaults to git commit all and push.
 #
 # Example:
-#   ./autocompile.py /my-latex-document-dir .tex,.bib "make pdf"
+#   ./autocommit.py ./test/ svg
 #
 # Dependencies:
 #   Linux, Python 2.6, Pyinotify
