@@ -52,7 +52,7 @@ if __name__ == '__main__':
     extension = sys.argv[2]
 
     # Optional argument
-    cmd_commit = shlex.split('git commit -a -m "automated"')
+    cmd_commit = shlex.split('git commit -a -m "automated commit from file change"')
     cmd_push = shlex.split('git push origin master')
     cmds = [cmd_commit, cmd_push]
     if len(sys.argv) == 4:
