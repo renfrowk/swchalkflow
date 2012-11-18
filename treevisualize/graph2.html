@@ -48,7 +48,6 @@ text.shadow {
   <body>
     <script type="text/javascript">
 
-// http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
 var links = [{source: "43dfb7", target: "547526", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "cd3e62", target: "7566b0", type: "suit"},{source: "cd3e62", target: "7566b0", type: "suit"},{source: "a406a3", target: "7cc47d", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "c6e96c", target: "43dfb7", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "5c543c", target: "27ac21", type: "suit"},{source: "5c543c", target: "10ad17", type: "suit"},{source: "5c543c", target: "10ad17", type: "suit"},{source: "417bca", target: "84f8f9", type: "suit"},{source: "417bca", target: "84f8f9", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "1ea8e2", target: "417bca", type: "suit"},{source: "1ea8e2", target: "417bca", type: "suit"},{source: "84f8f9", target: "cd3e62", type: "suit"},{source: "84f8f9", target: "cd3e62", type: "suit"},{source: "7cc47d", target: "0b3d63", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "547526", target: "a406a3", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "27ac21", target: "d78930", type: "suit"},{source: "10ad17", target: "1ea8e2", type: "suit"},{source: "10ad17", target: "1ea8e2", type: "suit"},{source: "84d9da", target: "c6e96c", type: "suit"},{source: "84d9da", target: "c6e96c", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "7566b0", target: "84d9da", type: "suit"},{source: "7566b0", target: "84d9da", type: "suit"},];
 
 var nodes = {};
@@ -60,14 +59,14 @@ links.forEach(function(link) {
 });
 
 var w = 960,
-    h = 500;
+    h = 600;
 
 var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([w, h])
-    .linkDistance(60)
-    .charge(-300)
+    .linkDistance(40)
+    .charge(-600)
     .on("tick", tick)
     .start();
 
