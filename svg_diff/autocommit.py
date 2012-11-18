@@ -19,25 +19,25 @@ import pyinotify
 import shlex
 from git import *
 import os
-import datetime
+import time
+from datetime import datetime
+from multiprocessing import Process, Lock
+import signal
+import threading
 
 REMOTE_URL='git@github.com:renfrowk/swchalkflow.git'
 ORIGIN_NAME = 'origin'
 
-class GitCommitter(Repo):
-	def __init__(self, local_url, remote_url):
-		self.repo = Repo(local_url)
-		self.repo_remote = self.repo.create_remote('origin',
-			remote_url)
-		self.origin = repo.remotes.origin
-		
-	def commit_local(self):
-		# Stop all threads first
-		threads = threadding.Thread.enumerate()
-		self.repo.commit('master')
+child_pid=None	#used for forking
+parent_pid=None
 
-	def commit_remote(self):
-		self.origin.push()
+class InputThread(threading.Thread):
+	def __init__(self, question):
+		threading.Thread.__init__(self)
+		self.question = question
+	def run(self):
+		return raw_input(self.question)
+
 
 class OnWriteHandler(pyinotify.ProcessEvent):
     def my_init(self, cwd, extension, cmds):
@@ -50,35 +50,68 @@ class OnWriteHandler(pyinotify.ProcessEvent):
 	try:
 		self.repo_remote = self.repo.create_remote(ORIGIN_NAME, REMOTE_URL)
 	except GitCommandError: # We already have a remote repo...
-		pass
+		self.repo_remote = Remote(self.repo, 'origin')
+	self.lck = None
+	self.p = None
+	self.it = InputThread('Is this okay (y/n)? ')
+	self.threads = []
+	self.threads.append(self.it)
 
     def _run_cmds(self):
         print '==> Modification detected'
-        subprocess.call(self.cmds[0], cwd=self.cwd)
-        subprocess.call(self.cmds[1], cwd=self.cwd)
-	ask_push()
+        #subprocess.call(self.cmds[0], cwd=self.cwd)
+        #subprocess.call(self.cmds[1], cwd=self.cwd)
+	try:
+		os.close(sys.stdin.fileno)
+	except TypeError:
+		pass #just ignore
+	self.lck = Lock()
+	self.p = Process(target=self.ask_push, args=[self.lck])
+	if (self.p.is_alive()):
+		os.kill(self.it.pid, signal.SIGKILL)
+		os.close(sys.stdin.fileno)
+		self.p.join()
+		os.kill(self.p.pid, signal.SIGKILL)
+	self.fork_push()
 
     def process_IN_MODIFY(self, event):
         if all(not event.pathname.endswith(ext) for ext in self.extensions):
             return
         self._run_cmds()
 
+    ## Fork a new process.  First, though, we need to end the
+    ## current child process.
+    def fork_push(self):
+	self.p.start()
+	self.p.join()
+	self.it = InputThread('Is this okay (y/n)? ')
+
     ## Show a prompt asking the user if they want to push the
     ## new version to the remote repository.
-    def ask_push():
-    	confirm_push = ''
-	push_date = get_current_date
-	print 'About to push \"', push_date, '" to ', REMOTE_URL
-	while (confirm_push.lower() != 'y') or (confirm_push.lower() != 'n'):
-	    	confirm_push = raw_input('Is this okay (y/n)? ')
-	if (confirm_push.lower() == 'y'):
+    def ask_push(self, l):
+	confirm_push = ''
+	self.repo.commit('master')
+	push_date = self.get_current_date()
+	while confirm_push[:1] not in ('y','n'):
+		confirm_push = self.it.start()
+		self.threads.append(self.it)
+		if (confirm_push == None):
+			sys.stdin.close()
+			if (self.it.is_alive()):
+				self.it.join()
+			return
+		self.threads.append(self.it)
+		confirm_push = confirm_push.lower()
+	if (confirm_push[:1] == 'y'):
 		self.repo_remote.push()
+	for t in threads:
+		t.join()
 
     ## Get a human-friendly date string in a format similar to:
     ## "Tue, Jan 8th, 2012 - 10:54:18 AM"
-    def get_current_date():
-    	d = now()
-    	return d.strftime('%a, %b %d, %Y - %I:%M:%S')
+    def get_current_date(self):
+    	d = datetime.now()
+    	return d.strftime('%a, %b %d, %Y - %I:%M:%S %p')
 
 
 def auto_compile(path, extension, cmds):
