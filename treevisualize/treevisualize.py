@@ -25,7 +25,8 @@ def graphList(tree):
 	for parent, children in tree.items():
 		for child in children:
 			if child != []:
-				out += "{source: \"%s\", target: \"%s\", type: \"suit\"}," % (parent[:6], child[:6])
+				out += "{\"source\": \"%s\", \"target\": \"%s\", \"type\": \"suit\"}," % (parent[:6], child[:6])
+	out = out[:-1] #remove trailing comma
 	out += "]"
 	return out
 

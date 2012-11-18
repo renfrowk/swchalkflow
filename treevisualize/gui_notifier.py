@@ -72,14 +72,16 @@ def addNode(child, tree):
         tree[parent_id].append(child_id)
         addNode(parent, tree)
 
+# generate list of commit tree for D3 graph
 def graphList(tree):
-    out = "["
-    for parent, children in tree.items():
-        for child in children:
-            if child != []:
-                out += "{source: \"%s\", target: \"%s\", type: \"suit\"}," % (parent[:6], child[:6])
-    out += "]"
-    return out
+	out = "["
+	for parent, children in tree.items():
+		for child in children:
+			if child != []:
+				out += "{\"source\": \"%s\", \"target\": \"%s\", \"type\": \"suit\"}," % (parent[:6], child[:6])
+	out = out[:-1] #remove trailing comma
+	out += "]"
+	return out
 
 # Create instance of FieldStorage 
 form = cgi.FieldStorage() 
