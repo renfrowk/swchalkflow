@@ -122,7 +122,7 @@ addedDocLines.append('  </g>\n')
 deletedDocLines.append('  </g>\n')
 unchangedDocLines.append('  </g>\n')
 
-output = prefix + addedDocLines + deletedDocLines + unchangedDocLines + suffix
+output = prefix + unchangedDocLines + addedDocLines + deletedDocLines + suffix
 
 pprint(output)
 
