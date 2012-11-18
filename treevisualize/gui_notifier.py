@@ -44,11 +44,33 @@ command = form.getvalue('command')
 
 print "Content-type:text/html\r\n\r\n"
 
+if (command == 'get_tree_data'):
+    repoDirectory = '/home/tomlinson/swchalkflow/'
+    
+    repo = Repo(repoDirectory, odbt=GitDB) #open the local git repo
+    assert repo.bare == False #assert that git repo already exists
+    repo.config_reader() #read-only access
+    
+    commit_tree = defaultdict(list) #initialize empty list default dict
+    
+    #iterate over all branches
+    #for each branch - needs implementation
+    for branch in repo.branches:
+        child = repo.commit(branch.name) #get latest commit
+        commit_tree[child.hexsha].append([]) #add base as parent with no children
+        addNode(child, commit_tree)
+    
+    graphData = graphList(commit_tree)
+    graphDataHash = hashlib.sha224(graphData).hexdigest()
+        
+    hashFileF = open('graphData.hash', 'w')
+    hashFileF.write(hashlib.sha224(graphData).hexdigest())
+    hashFileF.close()
+    print graphData
+        
 if (command == 'poll_tree_change'):
     
-    repoDirF = open('gitRepo.dir', 'r')
-    repoDirectory = repoDirF.read()
-    repoDirF.close()
+    repoDirectory = '/home/tomlinson/swchalkflow/'
     
     repo = Repo(repoDirectory, odbt=GitDB) #open the local git repo
     assert repo.bare == False #assert that git repo already exists
@@ -69,7 +91,7 @@ if (command == 'poll_tree_change'):
     hashFileF = open('graphData.hash', 'r')
     storedHash = hashFileF.read()
     hashFileF.close()
-    
+        
     if (graphDataHash != storedHash):
         hashFileF = open('graphData.hash', 'w')
         hashFileF.write(hashlib.sha224(graphData).hexdigest())

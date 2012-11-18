@@ -59,116 +59,122 @@ function sendDiffCommand () {
     $.get('gui_notifier.py?command=diff&hexsha_orig='+$('#diff').data('diffOrig')+'&hexsha_new='+$('#diff').data('diffNew'));
 }
 
-var links = [{source: "43dfb7", target: "547526", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "cd3e62", target: "7566b0", type: "suit"},{source: "cd3e62", target: "7566b0", type: "suit"},{source: "a406a3", target: "7cc47d", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "c6e96c", target: "43dfb7", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "5c543c", target: "27ac21", type: "suit"},{source: "5c543c", target: "10ad17", type: "suit"},{source: "5c543c", target: "10ad17", type: "suit"},{source: "417bca", target: "84f8f9", type: "suit"},{source: "417bca", target: "84f8f9", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "1ea8e2", target: "417bca", type: "suit"},{source: "1ea8e2", target: "417bca", type: "suit"},{source: "84f8f9", target: "cd3e62", type: "suit"},{source: "84f8f9", target: "cd3e62", type: "suit"},{source: "7cc47d", target: "0b3d63", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "547526", target: "a406a3", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "27ac21", target: "d78930", type: "suit"},{source: "10ad17", target: "1ea8e2", type: "suit"},{source: "10ad17", target: "1ea8e2", type: "suit"},{source: "84d9da", target: "c6e96c", type: "suit"},{source: "84d9da", target: "c6e96c", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "7566b0", target: "84d9da", type: "suit"},{source: "7566b0", target: "84d9da", type: "suit"},];
+function drawTree (data) {
+    var links = $.parseJSON(data);
+    //~ var links = [{source: "43dfb7", target: "547526", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "20e32d", target: "5c543c", type: "suit"},{source: "cd3e62", target: "7566b0", type: "suit"},{source: "cd3e62", target: "7566b0", type: "suit"},{source: "a406a3", target: "7cc47d", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "top", target: "bf7ec9", type: "suit"},{source: "top", target: "b1a271", type: "suit"},{source: "c6e96c", target: "43dfb7", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "c95a6b", target: "cdb091", type: "suit"},{source: "5c543c", target: "27ac21", type: "suit"},{source: "5c543c", target: "10ad17", type: "suit"},{source: "5c543c", target: "10ad17", type: "suit"},{source: "417bca", target: "84f8f9", type: "suit"},{source: "417bca", target: "84f8f9", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "b1a271", target: "c95a6b", type: "suit"},{source: "1ea8e2", target: "417bca", type: "suit"},{source: "1ea8e2", target: "417bca", type: "suit"},{source: "84f8f9", target: "cd3e62", type: "suit"},{source: "84f8f9", target: "cd3e62", type: "suit"},{source: "7cc47d", target: "0b3d63", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "adf991", target: "ac88f6", type: "suit"},{source: "547526", target: "a406a3", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "6e89a9", target: "adf991", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "ac88f6", target: "20e32d", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "cdb091", target: "6e89a9", type: "suit"},{source: "27ac21", target: "d78930", type: "suit"},{source: "10ad17", target: "1ea8e2", type: "suit"},{source: "10ad17", target: "1ea8e2", type: "suit"},{source: "84d9da", target: "c6e96c", type: "suit"},{source: "84d9da", target: "c6e96c", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "bf7ec9", target: "c95a6b", type: "suit"},{source: "7566b0", target: "84d9da", type: "suit"},{source: "7566b0", target: "84d9da", type: "suit"},];
 
-var nodes = {};
+    var nodes = {};
 
-// Compute the distinct nodes from the links.
-links.forEach(function(link) {
-  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
-});
+    // Compute the distinct nodes from the links.
+    links.forEach(function(link) {
+      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+      link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    });
 
-var w = 600,
-    h = 600;
+    var w = 600,
+        h = 600;
 
-var force = d3.layout.force()
-    .nodes(d3.values(nodes))
-    .links(links)
-    .size([w, h])
-    .linkDistance(40)
-    .charge(-600)
-    .on("tick", tick)
-    .start();
+    var force = d3.layout.force()
+        .nodes(d3.values(nodes))
+        .links(links)
+        .size([w, h])
+        .linkDistance(40)
+        .charge(-600)
+        .on("tick", tick)
+        .start();
 
-var svg = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
+    var svg = d3.select("body").append("svg:svg")
+        .attr("width", w)
+        .attr("height", h);
 
-// Per-type markers, as they don't inherit styles.
-svg.append("svg:defs").selectAll("marker")
-    .data(["suit", "licensing", "resolved"])
-  .enter().append("svg:marker")
-    .attr("id", String)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 15)
-    .attr("refY", -1.5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-  .append("svg:path")
-    .attr("d", "M0,-5L10,0L0,5");
+    // Per-type markers, as they don't inherit styles.
+    svg.append("svg:defs").selectAll("marker")
+        .data(["suit", "licensing", "resolved"])
+      .enter().append("svg:marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 15)
+        .attr("refY", -1.5)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+      .append("svg:path")
+        .attr("d", "M0,-5L10,0L0,5");
 
-var path = svg.append("svg:g").selectAll("path")
-    .data(force.links())
-  .enter().append("svg:path")
-    .attr("class", function(d) { return "link " + d.type; })
-    .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
+    var path = svg.append("svg:g").selectAll("path")
+        .data(force.links())
+      .enter().append("svg:path")
+        .attr("class", function(d) { return "link " + d.type; })
+        .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
-var circle = svg.append("svg:g").selectAll("circle")
-    .data(force.nodes())
-  .enter().append("svg:circle")
-    .attr("r", 6)
-    .attr("data-hexsha", function(d) { return d.name; })
-    .call(force.drag);
+    var circle = svg.append("svg:g").selectAll("circle")
+        .data(force.nodes())
+      .enter().append("svg:circle")
+        .attr("r", 6)
+        .attr("data-hexsha", function(d) { return d.name; })
+        .call(force.drag);
 
-var text = svg.append("svg:g").selectAll("g")
-    .data(force.nodes())
-  .enter().append("svg:g");
+    var text = svg.append("svg:g").selectAll("g")
+        .data(force.nodes())
+      .enter().append("svg:g");
 
-// A copy of the text with a thick white stroke for legibility.
-text.append("svg:text")
-    .attr("x", 8)
-    .attr("y", ".31em")
-    .attr("class", "shadow")
-    .text(function(d) { return d.name; });
+    // A copy of the text with a thick white stroke for legibility.
+    text.append("svg:text")
+        .attr("x", 8)
+        .attr("y", ".31em")
+        .attr("class", "shadow")
+        .text(function(d) { return d.name; });
 
-text.append("svg:text")
-    .attr("x", 8)
-    .attr("y", ".31em")
-    .text(function(d) { return d.name; });
+    text.append("svg:text")
+        .attr("x", 8)
+        .attr("y", ".31em")
+        .text(function(d) { return d.name; });
 
-// Use elliptical arc path segments to doubly-encode directionality.
-function tick() {
-  path.attr("d", function(d) {
-    // var dx = d.target.x - d.source.x,
-    //     dy = d.target.y - d.source.y,
-    var dx = d.target.x,
-        dy = d.target.y,
-        // dr = Math.sqrt(dx * dx + dy * dy);
-        dr = 0;
-    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-  });
+    // Use elliptical arc path segments to doubly-encode directionality.
+    function tick() {
+      path.attr("d", function(d) {
+        // var dx = d.target.x - d.source.x,
+        //     dy = d.target.y - d.source.y,
+        var dx = d.target.x,
+            dy = d.target.y,
+            // dr = Math.sqrt(dx * dx + dy * dy);
+            dr = 0;
+        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+      });
 
-  circle.attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")";
-  });
+      circle.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
 
-  text.attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")";
-  });
-}
-
-$('circle').dblclick( function () {
-    var hexsha = $(this).data('hexsha');
-    $.get('gui_notifier.py?command=view&hexsha='+hexsha);
-});
-
-$('circle').click( function () {
-    var hexsha = $(this).data('hexsha');
-    if (diffOn) {
-        if ($('#diff').data('diffOrig') == '') {
-            $('#diff').data('diffOrig', hexsha);
-        }
-        else {
-            $('#diff').data('diffNew', hexsha);
-            sendDiffCommand();
-            diffOn = false;
-            $('#diff').data('diffOrig','');
-            $('#diff').data('diffNew','');
-            $('#diff').html('Start Diff');
-        }
+      text.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
     }
+
+    $('circle').dblclick( function () {
+        var hexsha = $(this).data('hexsha');
+        $.get('gui_notifier.py?command=view&hexsha='+hexsha);
+    });
+
+    $('circle').click( function () {
+        var hexsha = $(this).data('hexsha');
+        if (diffOn) {
+            if ($('#diff').data('diffOrig') == '') {
+                $('#diff').data('diffOrig', hexsha);
+            }
+            else {
+                $('#diff').data('diffNew', hexsha);
+                sendDiffCommand();
+                diffOn = false;
+                $('#diff').data('diffOrig','');
+                $('#diff').data('diffNew','');
+                $('#diff').html('Start Diff');
+            }
+        }
+    });
+}
+$.get('gui_notifier.py?command=get_tree_data', function(data) {
+    drawTree(data);
 });
 
 $('#diff').click( function () {
@@ -184,6 +190,16 @@ $('#diff').click( function () {
     }
 
 });
+
+setInterval(function () {
+        $('svg').remove();
+        $.get('gui_notifier.py?command=poll_tree_change', function(data) {
+            if (data != 'no_update')
+                drawTree(data);
+        });
+    }
+    ,2000);
+    
         </script>
   </body>
 </html>
