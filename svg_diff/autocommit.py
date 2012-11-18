@@ -37,7 +37,7 @@ class OnWriteHandler(pyinotify.ProcessEvent):
 		print orig, target
 		#check if orig and target are branch heads
 		branch_heads = getBranchHeads()
-		if (branch_heads.has_key(commit1)) and (branch_heads.has_key(commit1)):
+		if (branch_heads.has_key(orig)) and (branch_heads.has_key(target)):
 			#git merge
 			orig_branch = branch_heads[orig]
 			target_branch = branch_heads[target]
