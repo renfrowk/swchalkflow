@@ -10,9 +10,54 @@ from collections import defaultdict
 import json
 import hashlib
 import cgi
+import os
+import tempfile
+import shutil
 
 # Import modules for CGI handling 
 import cgi, cgitb 
+
+#clones local repo to temp repo in temp directory. returns content of
+#   svg file specified by SVG_PATH and SVG_NAME
+# input: commit, hash of git commit snapshot to checkout
+#        tmp_dir, temporary directory generated in getSVGFromHash()
+# output: svg file contents
+def cloneTempRepo(commit, tmp_dir):
+	LOCAL_REPO_DIR = "/home/krenfrow/swchalkflow/"
+	SVG_PATH = "/svg_diff/test/" #relative to repo root dir
+	SVG_NAME = "a.svg"
+	
+	#load local repo
+	local_repo = Repo(LOCAL_REPO_DIR, odbt=GitDB) #open the local git repo
+	assert local_repo.bare == False #assert that git repo already exists
+	local_repo.config_reader() #read-only access
+	
+	#ensure tmp_dir exists
+	assert os.path.exists(tmp_dir) == True #ensure dir exists
+	
+	#clone local repo into temp repo
+	temp_repo = local_repo.clone(tmp_dir)
+	
+	#checkout from commit hash
+	temp_repo.git.checkout(commit)
+	
+	f = open(tmp_dir + SVG_PATH + SVG_NAME, 'r')
+	return f.read()
+
+# prints file contents of svg file (hard coded atm) from git snapshot
+#    defined by commit hash
+# input: commit, commit, hash of git commit snapshot to checkout
+# output: prints contents of svg file
+def getSVGFromHash(commit):
+	try:
+		tmp_dir = tempfile.mkdtemp() # create temp dir
+		print cloneTempRepo(commit, tmp_dir)
+	finally:
+		try:
+			shutil.rmtree(tmp_dir) # delete directory
+		except OSError, e:
+			if e.errno != 2: # code 2 - no such file or directory
+				raise
 
 def addNode(child, tree):
     #base case
@@ -79,7 +124,6 @@ if (command == 'poll_tree_change'):
     commit_tree = defaultdict(list) #initialize empty list default dict
     
     #iterate over all branches
-    #for each branch - needs implementation
     for branch in repo.branches:
         child = repo.commit(branch.name) #get latest commit
         commit_tree[child.hexsha].append([]) #add base as parent with no children
@@ -104,6 +148,7 @@ if (command == 'view'):
     form = cgi.FieldStorage()
     hexsha = form.getvalue('hexsha')
     print 'VIEW '+hexsha
+    svg_file = getSVGFromHash(hexsha) #svg_file will be string of file contents
     # set head to hexsha, open inkscape with document (with listener)
     
 if (command == 'diff'):
@@ -112,5 +157,3 @@ if (command == 'diff'):
     hexshaNew = form.getvalue('hexsha_new')
     print 'DIFF '+hexshaOrig+' -> '+hexshaNew
     # compute diff, open inkscape window (with listener)
-    
-    
