@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Usage:
-#   ./autocompile.py path ext1,ext2,extn cmd
+#   ./autocommit.py path ext1,ext2,extn cmd
 #
 # Blocks monitoring |path| and its subdirectories for modifications on
 # files ending with suffix |extk|. Run |cmd| each time a modification
@@ -60,7 +60,7 @@ def getBranchHeads():
 		branch_heads[repo.commit(branch.name).hexsha] = branch.name
 	return branch_heads
 
-def auto_compile(path, extension, cmds):
+def auto_commit(path, extension, cmds):
     wm = pyinotify.WatchManager()
     handler = OnWriteHandler(cwd=path, extension=extension, cmds=cmds)
     notifier = pyinotify.Notifier(wm, default_proc_fun=handler)
@@ -85,4 +85,4 @@ if __name__ == '__main__':
         cmds = sys.argv[3]
 
     # Blocks monitoring
-    auto_compile(path, extension, cmds)
+    auto_commit(path, extension, cmds)
