@@ -15,26 +15,26 @@ import cgi
 import cgi, cgitb 
 
 def addNode(child, tree):
-	#base case
-	if not child.parents:
-		tree["top"].append(child.hexsha)
-		return
-	
-	for parent in child.parents: #iterate over each child's parent
-		parent_id = parent.hexsha
-		child_id = child.hexsha
-		
-		tree[parent_id].append(child_id)
-		addNode(parent, tree)
+    #base case
+    if not child.parents:
+        tree["top"].append(child.hexsha)
+        return
+    
+    for parent in child.parents: #iterate over each child's parent
+        parent_id = parent.hexsha
+        child_id = child.hexsha
+        
+        tree[parent_id].append(child_id)
+        addNode(parent, tree)
 
 def graphList(tree):
-	out = "["
-	for parent, children in tree.items():
-		for child in children:
-			if child != []:
-				out += "{source: \"%s\", target: \"%s\", type: \"suit\"}," % (parent[:6], child[:6])
-	out += "]"
-	return out
+    out = "["
+    for parent, children in tree.items():
+        for child in children:
+            if child != []:
+                out += "{source: \"%s\", target: \"%s\", type: \"suit\"}," % (parent[:6], child[:6])
+    out += "]"
+    return out
 
 # Create instance of FieldStorage 
 form = cgi.FieldStorage() 
@@ -51,20 +51,20 @@ if (command == 'poll_tree_change'):
     repoDirF.close()
     
     repo = Repo(repoDirectory, odbt=GitDB) #open the local git repo
-	assert repo.bare == False #assert that git repo already exists
-	repo.config_reader() #read-only access
-	
-	commit_tree = defaultdict(list) #initialize empty list default dict
-	
-	#iterate over all branches
-	#for each branch - needs implementation
-	for branch in repo.branches:
-		child = repo.commit(branch.name) #get latest commit
-		commit_tree[child.hexsha].append([]) #add base as parent with no children
-		addNode(child, commit_tree)
-	
+    assert repo.bare == False #assert that git repo already exists
+    repo.config_reader() #read-only access
+    
+    commit_tree = defaultdict(list) #initialize empty list default dict
+    
+    #iterate over all branches
+    #for each branch - needs implementation
+    for branch in repo.branches:
+        child = repo.commit(branch.name) #get latest commit
+        commit_tree[child.hexsha].append([]) #add base as parent with no children
+        addNode(child, commit_tree)
+    
     graphData = graphList(commit_tree)
-	graphDataHash = hashlib.sha224(graphData).hexdigest()
+    graphDataHash = hashlib.sha224(graphData).hexdigest()
     
     hashFileF = open('graphData.hash', 'r')
     storedHash = hashFileF.read()
@@ -76,16 +76,18 @@ if (command == 'poll_tree_change'):
         hashFileF.close()
         print graphData
     else:
-        print "{'update':'false'}"
+        print "no_update"
 
 if (command == 'view'):
     form = cgi.FieldStorage()
     hexsha = form["hexsha"]
+    print hexsha
     # set head to hexsha, open inkscape with document (with listener)
     
 if (command == 'diff'):
     form = cgi.FieldStorage()
     hexshaOrig = form["hexsha_orig"]
     hexshaNew = form["hexsha_new"]
+    print hexshaOrig+' -> '+hexshaNew
     # compute diff, open inkscape window (with listener)
     
