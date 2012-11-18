@@ -15,6 +15,7 @@ import tempfile
 import shutil
 import sys
 import StringIO
+import subprocess
 
 # Import modules for CGI handling 
 import cgi, cgitb 
@@ -308,3 +309,7 @@ if (command == 'diff'):
     svg_new = getSVGFromHash(hexsha_new)
     generateDiffFile(svg_orig, svg_new, '/home/tomlinson/output/'+hexsha_orig+'_'+hexsha_new+'.svg')
     # compute diff, open inkscape window (with listener)
+    
+    #run shell command
+    cmd = shlex.split(("inkscape -g -f %s") % (filename))
+    subprocess.call(cmd)
