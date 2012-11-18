@@ -28,8 +28,8 @@ class OnWriteHandler(pyinotify.ProcessEvent):
 
     def _commit_push(self):
         print '==> Modification detected'
-        #subprocess.call(self.cmds[0], cwd=self.cwd)
-        #subprocess.call(self.cmds[1], cwd=self.cwd)
+        subprocess.call(self.cmds[0], cwd=self.cwd)
+        subprocess.call(self.cmds[1], cwd=self.cwd)
     def _merge(self, filename):
 		filename_parts = filename.split('_')
 		orig = filename_parts[-3]
