@@ -149,13 +149,15 @@ if (command == 'poll_tree_change'):
 if (command == 'view'):
     form = cgi.FieldStorage()
     hexsha = form.getvalue('hexsha')
-    print 'VIEW '+hexsha
+    print 'VIEW ' + hexsha
     svg_file = getSVGFromHash(hexsha) #svg_file will be string of file contents
     # set head to hexsha, open inkscape with document (with listener)
     
 if (command == 'diff'):
     form = cgi.FieldStorage()
-    hexshaOrig = form.getvalue('hexsha_orig')
-    hexshaNew = form.getvalue('hexsha_new')
-    print 'DIFF '+hexshaOrig+' -> '+hexshaNew
+    hexsha_orig = form.getvalue('hexsha_orig')
+    hexsha_new = form.getvalue('hexsha_new')
+    print 'DIFF ' + hexsha_orig + ' -> ' + hexsha_new
+    svg_orig = getSVGFromHash(hexsha_orig)
+    svg_new = getSVGFromHash(hexsha_new)
     # compute diff, open inkscape window (with listener)
