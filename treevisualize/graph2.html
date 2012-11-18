@@ -192,13 +192,14 @@ $('#diff').click( function () {
 });
 
 setInterval(function () {
-        $('svg').remove();
         $.get('gui_notifier.py?command=poll_tree_change', function(data) {
-            if (data != 'no_update')
+            if (data != '\nno_update\n') {
+                $('svg').remove();
                 drawTree(data);
+            }   
         });
     }
-    ,2000);
+    ,100);
     
         </script>
   </body>
