@@ -55,6 +55,15 @@ def graphList(tree):
 				out += "{source: \"%s\", target: \"%s\", type: \"suit\"}," % (parent[:6], child[:6])
 	out += "]"
 	return out
+	
+def diGraph(tree):
+	out = ""
+	for parent, children in tree.items():
+		for child in children:
+			if child != []:
+				out += "\"%s\" -> \"%s\";\n" % (parent[:6], child[:6])
+	return out
+	
 
 if __name__ == '__main__':
 	repo = Repo("~/swchalkflow/", odbt=GitDB) #open the local git repo
@@ -66,11 +75,10 @@ if __name__ == '__main__':
 	#iterate over all branches
 	#for each branch - needs implementation
 	for branch in repo.branches:
-		print branch.name
 		child = repo.commit(branch.name) #get latest commit
 		commit_tree[child.hexsha].append([]) #add base as parent with no children
 		addNode(child, commit_tree)
 	
-	print graphList(commit_tree)
+	print diGraph(commit_tree)
 	
 
