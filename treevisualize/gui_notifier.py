@@ -11,7 +11,6 @@ import json
 import hashlib
 import cgi
 import os
-import errno
 import tempfile
 import shutil
 
@@ -42,7 +41,7 @@ def cloneTempRepo(commit, tmp_dir):
 	#checkout from commit hash
 	temp_repo.git.checkout(commit)
 	
-	f = open(tmp_dir + SVG_PATH + SVG_NAME, 'r') #
+	f = open(tmp_dir + SVG_PATH + SVG_NAME, 'r')
 	return f.read()
 
 # prints file contents of svg file (hard coded atm) from git snapshot
