@@ -3,9 +3,7 @@
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Git Commits Graph</title>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.29.1"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?1.29.1"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.29.1"></script>
+    <script type="text/javascript" src="d3/d3.v2.js"></script>
     <style type="text/css">
 
 path.link {
@@ -58,7 +56,7 @@ links.forEach(function(link) {
   link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
 });
 
-var w = 960,
+var w = 600,
     h = 600;
 
 var force = d3.layout.force()
@@ -98,6 +96,7 @@ var circle = svg.append("svg:g").selectAll("circle")
     .data(force.nodes())
   .enter().append("svg:circle")
     .attr("r", 6)
+    .attr("data-hexsha", d.name)
     .call(force.drag);
 
 var text = svg.append("svg:g").selectAll("g")
