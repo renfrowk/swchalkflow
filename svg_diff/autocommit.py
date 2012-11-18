@@ -17,6 +17,8 @@ import subprocess
 import sys
 import pyinotify
 import shlex
+from pprint import pprint
+from git import *
 
 class OnWriteHandler(pyinotify.ProcessEvent):
     def my_init(self, cwd, extension, cmds):
@@ -24,15 +26,40 @@ class OnWriteHandler(pyinotify.ProcessEvent):
         self.extensions = extension.split(',')
         self.cmds = cmds
 
-    def _run_cmds(self):
+    def _commit_push(self):
         print '==> Modification detected'
-        subprocess.call(self.cmds[0], cwd=self.cwd)
-        subprocess.call(self.cmds[1], cwd=self.cwd)
+        #subprocess.call(self.cmds[0], cwd=self.cwd)
+        #subprocess.call(self.cmds[1], cwd=self.cwd)
+    def _merge(self, filename):
+		print "MERGE"
+		filename_parts = filename.split('_')
+		orig = filename_parts[-3]
+		target = filename_parts[-2]
+		print orig, target
+		#check if orig and target are branch heads
+		branch_heads = getBranchHeads()
+		if (branch_heads.has_key(commit1)) and (branch_heads.has_key(commit1)):
+			#git merge
+			orig_branch = branch_heads[orig]
+			target_branch = branch_heads[target]
+			cmd_merge = shlex.split(('git merge %s/%s') % (orig_branch, target_branch))
+			
 
     def process_IN_MODIFY(self, event):
+        if event.pathname.split("/")[-1][:15] == "chalkflow_diff_":
+			self._merge(event.pathname)
+			return
         if all(not event.pathname.endswith(ext) for ext in self.extensions):
             return
-        self._run_cmds()
+        self._commit_push()
+
+def getBranchHeads():
+	repo = Repo("~/swchalkflow/", odbt=GitDB) #open the local git repo
+	assert repo.bare == False #assert that git repo already exists
+	branch_heads = {}
+	for branch in repo.branches:
+		branch_heads[repo.commit(branch.name).hexsha] = branch.name
+	return branch_heads
 
 def auto_compile(path, extension, cmds):
     wm = pyinotify.WatchManager()
