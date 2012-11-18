@@ -80,14 +80,15 @@ if (command == 'poll_tree_change'):
 
 if (command == 'view'):
     form = cgi.FieldStorage()
-    hexsha = form["hexsha"]
-    print hexsha
+    hexsha = form.getvalue('hexsha')
+    print 'VIEW '+hexsha
     # set head to hexsha, open inkscape with document (with listener)
     
 if (command == 'diff'):
     form = cgi.FieldStorage()
-    hexshaOrig = form["hexsha_orig"]
-    hexshaNew = form["hexsha_new"]
-    print hexshaOrig+' -> '+hexshaNew
+    hexshaOrig = form.getvalue('hexsha_orig')
+    hexshaNew = form.getvalue('hexsha_new')
+    print 'DIFF '+hexshaOrig+' -> '+hexshaNew
     # compute diff, open inkscape window (with listener)
+    
     
