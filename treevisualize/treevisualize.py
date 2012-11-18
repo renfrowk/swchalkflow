@@ -66,6 +66,7 @@ if __name__ == '__main__':
 	#iterate over all branches
 	#for each branch - needs implementation
 	for branch in repo.branches:
+		print branch.name
 		child = repo.commit(branch.name) #get latest commit
 		commit_tree[child.hexsha].append([]) #add base as parent with no children
 		addNode(child, commit_tree)
