@@ -73,7 +73,6 @@ if __name__ == '__main__':
 	commit_tree = defaultdict(list) #initialize empty list default dict
 	
 	#iterate over all branches
-	#for each branch - needs implementation
 	for branch in repo.branches:
 		child = repo.commit(branch.name) #get latest commit
 		commit_tree[child.hexsha].append([]) #add base as parent with no children

@@ -31,7 +31,6 @@ class OnWriteHandler(pyinotify.ProcessEvent):
         #subprocess.call(self.cmds[0], cwd=self.cwd)
         #subprocess.call(self.cmds[1], cwd=self.cwd)
     def _merge(self, filename):
-		print "MERGE"
 		filename_parts = filename.split('_')
 		orig = filename_parts[-3]
 		target = filename_parts[-2]
