@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Usage:
-#   ./autocompile.py path ext1,ext2,extn cmd
+#   ./autocommit.py path ext1,ext2,extn cmd
 #
 # Blocks monitoring |path| and its subdirectories for modifications on
 # files ending with suffix |extk|. Run |cmd| each time a modification
@@ -28,17 +28,16 @@ class OnWriteHandler(pyinotify.ProcessEvent):
 
     def _commit_push(self):
         print '==> Modification detected'
-        #subprocess.call(self.cmds[0], cwd=self.cwd)
-        #subprocess.call(self.cmds[1], cwd=self.cwd)
+        subprocess.call(self.cmds[0], cwd=self.cwd)
+        subprocess.call(self.cmds[1], cwd=self.cwd)
     def _merge(self, filename):
-		print "MERGE"
 		filename_parts = filename.split('_')
 		orig = filename_parts[-3]
 		target = filename_parts[-2]
 		print orig, target
 		#check if orig and target are branch heads
 		branch_heads = getBranchHeads()
-		if (branch_heads.has_key(commit1)) and (branch_heads.has_key(commit1)):
+		if (branch_heads.has_key(orig)) and (branch_heads.has_key(target)):
 			#git merge
 			orig_branch = branch_heads[orig]
 			target_branch = branch_heads[target]
@@ -61,7 +60,7 @@ def getBranchHeads():
 		branch_heads[repo.commit(branch.name).hexsha] = branch.name
 	return branch_heads
 
-def auto_compile(path, extension, cmds):
+def auto_commit(path, extension, cmds):
     wm = pyinotify.WatchManager()
     handler = OnWriteHandler(cwd=path, extension=extension, cmds=cmds)
     notifier = pyinotify.Notifier(wm, default_proc_fun=handler)
@@ -86,4 +85,4 @@ if __name__ == '__main__':
         cmds = sys.argv[3]
 
     # Blocks monitoring
-    auto_compile(path, extension, cmds)
+    auto_commit(path, extension, cmds)
