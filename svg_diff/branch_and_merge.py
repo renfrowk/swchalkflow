@@ -1,10 +1,16 @@
-##!/usr/bin/env python
+#!/usr/bin/env python
 ## @package branch_and_merge
 #
 # Branch or merge files.
 
 import shutil
 import git
+import os
+import io
+from gitdb.util import hex_to_bin
+from binascii import unhexlify
+import shlex
+import tempfile
 
 """
 Example shas:
@@ -12,24 +18,35 @@ Example shas:
   and
   0b3d63727ad5225c8e36909ceb3c9f3a01957caa
 """
-test_src_sha = '205ec9a5d8d48aa36ab346e9d4e0d4ba29fe7a5f'
-test_dest_sha = '0b3d63727ad5225c8e36909ceb3c9f3a01957caa'
+test_dest_sha = '1ba8428cd8bfbde1d39497fe39abfe25717b85d7'
+test_src_sha = 'b5b37816276147bff453b4357e79293aa8e28d1a'
 test_repo = 'git@github.com:renfrowk/swchalkflow_demo.git'
 
-def my_merge(repo, dest, source):
+def my_merge(repo, base_path, filename, dest, source):
   """Using diff_file, merge branch1 and branch2
   " repo Repository() object
+  " filename The filename to overwrite
   " dest The destination SHA
   " source the source SHA
   """
-  dest_path = (IndexObject(repo, dest)).abspath
-  source_path = (IndexObject(repo, source)).abspath
-  print ('Opened dest="%s" and src="%s"' % (dest_path, dest_src))
-  copy(source_path, dest_path)
-  
-  ## Commit and push to the remote repo.
-  repo.commit()
-  repo.remote().push()
+  source_file = get_file(repo, source, filename)
+  #dest_file = get_file(repo, dest, filename)
+  if (base_path[-1] != '/'):
+    base_path = basepath + '/'
+  dest_file = file(base_path + filename)
+  print os.path.getsize(source_file.name), "vs", os.path.getsize(dest_file.name)
+  shutil.copyfile(source_file.name, dest_file.name)
+  print "Copied", source_file, "to", dest_file
+
+def get_file(orig_repo, the_sha, filename):
+  copy_path = tempfile.mkdtemp(dir='/tmp/')
+  new_repo = orig_repo.clone(copy_path)
+  print "Created temporary repo in %s" % (copy_path)
+  g = new_repo.git
+  g.checkout(the_sha)
+  print "Checked out", the_sha
+  print "The file is ", file(copy_path + '/' + filename).name
+  return file(copy_path + '/' + filename)
 
 def my_branch(repo, branchName=None):
   """ Create a new branch.
@@ -49,3 +66,7 @@ def my_branch(repo, branchName=None):
     newBranch = branchName
   git.checkout('head', b=newBranch)
   repo.remote.push()
+
+if __name__=='__main__':
+  print "Hello"
+  test()
