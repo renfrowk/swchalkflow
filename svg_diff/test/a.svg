@@ -30,10 +30,10 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="513"
-     inkscape:window-height="444"
-     inkscape:window-x="868"
-     inkscape:window-y="35"
+     inkscape:window-width="860"
+     inkscape:window-height="459"
+     inkscape:window-x="521"
+     inkscape:window-y="79"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -135,6 +135,11 @@
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 582.85714,283.79075 434.28571,475.21933"
        id="path2998"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 697.14286,409.50504 -622.857146,100"
+       id="path3000"
        inkscape:connector-curvature="0" />
   </g>
 </svg>
